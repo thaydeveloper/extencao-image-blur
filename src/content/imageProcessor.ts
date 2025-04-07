@@ -10,10 +10,18 @@ export class ImageProcessor {
       "video",
       'div[style*="background-image"]',
       "div.last-videos-link",
+      "div.kvfysmfp",
       "canvas.sl-safe-watermark",
       "div.sl-safe-glass",
       ".video-js",
       'div[style*="background-url"]',
+      // Novos seletores para posts
+      "canvas.ufhsfnkm",
+      "canvas.sc-ktPPKK",
+      "canvas.izXBxH",
+      '[data-testid="post-display-imagePostDiv"] canvas',
+      ".sc-eqUAAy canvas",
+      ".sc-YysOf canvas",
     ];
 
     return document.querySelectorAll(selectors.join(","));
@@ -42,18 +50,21 @@ export class ImageProcessor {
         z-index: 9999;
       `;
       element.parentElement?.appendChild(wrapper);
-    } else if (element.classList.contains("last-videos-link")) {
+    } else if (
+      element.classList &&
+      element.classList.contains("last-videos-link")
+    ) {
       element.setAttribute(
         "style",
-        element.getAttribute("style") + ";" + blurStyle
+        (element.getAttribute("style") || "") + ";" + blurStyle
       );
-    } else if (element.classList.contains("sl-safe-glass")) {
+    } else if (
+      element.classList &&
+      element.classList.contains("sl-safe-glass")
+    ) {
       element.setAttribute("style", blurStyle);
-    } else {
-      element.setAttribute(
-        "style",
-        element.getAttribute("style") + ";" + blurStyle
-      );
+    } else if (element instanceof HTMLElement) {
+      element.style.cssText += blurStyle;
     }
   }
 
@@ -65,31 +76,11 @@ export class ImageProcessor {
       this.applyBlur(element);
     });
 
-    // Observer para elementos dinâmicos
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        mutation.addedNodes.forEach((node) => {
-          if (node instanceof Element) {
-            if (node.matches(this.getSelectors())) {
-              this.applyBlur(node);
-            }
-            node.querySelectorAll(this.getSelectors()).forEach((el) => {
-              this.applyBlur(el);
-            });
-          }
-        });
-      });
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ["src", "style", "class"],
-    });
+    // Removemos o MutationObserver daqui para evitar conflitos
+    // O observer agora está apenas no index.ts
   }
 
-  private getSelectors(): string {
+  getSelectors(): string {
     return 'img, video, div[style*="background-image"], div.last-videos-link, canvas.sl-safe-watermark, div.sl-safe-glass, .video-js, div[style*="background-url"]';
   }
 }

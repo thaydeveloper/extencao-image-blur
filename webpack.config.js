@@ -21,8 +21,13 @@ module.exports = {
   output: {
     filename: "[name].js",
     path: path.resolve(__dirname, "dist"),
+    clean: true,
   },
   optimization: {
     minimize: false,
+    concatenateModules: true,
+  },
+  performance: {
+    hints: false,
   },
 };

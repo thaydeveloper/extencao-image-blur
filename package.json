@@ -4,7 +4,8 @@
   "description": "Uma extensão de navegador que identifica e desfoca imagens na página usando um modelo de linguagem local.",
   "main": "src/background.ts",
   "scripts": {
-    "build": "webpack",
+    "clean": "rm -rf dist",
+    "build": "npm run clean && webpack --config webpack.config.js",
     "watch": "webpack --watch",
     "start": "web-ext run"
   },

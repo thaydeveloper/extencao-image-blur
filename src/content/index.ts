@@ -1,6 +1,7 @@
 import { ImageProcessor } from "./imageProcessor";
 
 const imageProcessor = new ImageProcessor();
+let observer: MutationObserver | null = null;
 
 // Função para processar todas as mídias
 const processAllMedia = () => {
@@ -8,25 +9,53 @@ const processAllMedia = () => {
   imageProcessor.blurImages();
 };
 
-// Executa quando o DOM é carregado
-document.addEventListener("DOMContentLoaded", processAllMedia);
+// Função para inicializar o observer com segurança
+const setupObserver = () => {
+  // Verifica se document.body existe
+  if (!document.body) {
+    console.log("document.body ainda não está disponível, aguardando...");
+    // Tenta novamente em 50ms
+    setTimeout(setupObserver, 50);
+    return;
+  }
 
-// Executa quando a página terminar de carregar completamente
-window.addEventListener("load", processAllMedia);
+  // Se o observer já foi criado, não crie outro
+  if (observer) return;
 
-// Observer para mudanças dinâmicas no DOM
-const observer = new MutationObserver((mutations) => {
-  mutations.forEach(() => {
-    processAllMedia();
+  console.log("Configurando observer no document.body");
+
+  // Cria o observer
+  observer = new MutationObserver(() => {
+    // Usa setTimeout para evitar chamadas muito frequentes
+    if (!processingTimeout) {
+      processingTimeout = setTimeout(() => {
+        processAllMedia();
+        processingTimeout = null;
+      }, 200);
+    }
   });
+
+  // Inicia a observação
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: false, // Reduzimos as notificações para melhorar performance
+  });
+};
+
+// Controle para evitar processamentos redundantes
+let processingTimeout: ReturnType<typeof setTimeout> | null = null;
+
+// Chama quando o DOM começa a ser carregado
+document.addEventListener("DOMContentLoaded", () => {
+  processAllMedia();
+  setupObserver();
 });
 
-// Inicia o observer
-observer.observe(document.body, {
-  childList: true,
-  subtree: true,
-  attributes: true,
-  attributeFilter: ["src", "style", "class"],
+// Chama quando a página termina de carregar completamente
+window.addEventListener("load", () => {
+  processAllMedia();
+  setupObserver();
 });
 
 // Escuta mensagens do background script
@@ -37,5 +66,15 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
-// Executa imediatamente para pegar elementos já presentes
-processAllMedia();
+// Tenta configurar o observer imediatamente
+// mas só se o documento já estiver em um estado avançado de carregamento
+if (document.readyState !== "loading") {
+  console.log("Documento já em carregamento, tentando configurar observer");
+  setupObserver();
+}
+
+// Processa elementos já presentes se possível
+if (document.documentElement) {
+  console.log("Processando elementos iniciais");
+  processAllMedia();
+}
