@@ -5,7 +5,6 @@ let observer: MutationObserver | null = null;
 
 // Função para processar todas as mídias
 const processAllMedia = () => {
-  console.log("Processando todas as mídias...");
   imageProcessor.blurImages();
 };
 
@@ -13,7 +12,6 @@ const processAllMedia = () => {
 const setupObserver = () => {
   // Verifica se document.body existe
   if (!document.body) {
-    console.log("document.body ainda não está disponível, aguardando...");
     // Tenta novamente em 50ms
     setTimeout(setupObserver, 50);
     return;
@@ -21,8 +19,6 @@ const setupObserver = () => {
 
   // Se o observer já foi criado, não crie outro
   if (observer) return;
-
-  console.log("Configurando observer no document.body");
 
   // Cria o observer
   observer = new MutationObserver(() => {
@@ -69,12 +65,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 // Tenta configurar o observer imediatamente
 // mas só se o documento já estiver em um estado avançado de carregamento
 if (document.readyState !== "loading") {
-  console.log("Documento já em carregamento, tentando configurar observer");
   setupObserver();
 }
 
 // Processa elementos já presentes se possível
 if (document.documentElement) {
-  console.log("Processando elementos iniciais");
   processAllMedia();
 }

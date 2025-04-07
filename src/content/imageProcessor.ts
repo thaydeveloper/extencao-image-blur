@@ -1,7 +1,5 @@
 export class ImageProcessor {
-  constructor() {
-    console.log("ImageProcessor iniciado");
-  }
+  constructor() {}
 
   identifyMedia() {
     // Seletores específicos para o site
@@ -15,7 +13,6 @@ export class ImageProcessor {
       "div.sl-safe-glass",
       ".video-js",
       'div[style*="background-url"]',
-      // Novos seletores para posts
       "canvas.ufhsfnkm",
       "canvas.sc-ktPPKK",
       "canvas.izXBxH",
@@ -28,8 +25,6 @@ export class ImageProcessor {
   }
 
   applyBlur(element: Element) {
-    console.log("Aplicando blur em:", element);
-
     // Aplica blur com CSS mais agressivo
     const blurStyle = `
       filter: blur(20px) !important;
@@ -70,14 +65,10 @@ export class ImageProcessor {
 
   blurImages() {
     const mediaElements = this.identifyMedia();
-    console.log(`Encontrados ${mediaElements.length} elementos de mídia`);
 
     mediaElements.forEach((element) => {
       this.applyBlur(element);
     });
-
-    // Removemos o MutationObserver daqui para evitar conflitos
-    // O observer agora está apenas no index.ts
   }
 
   getSelectors(): string {

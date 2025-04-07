@@ -12,9 +12,7 @@
   -webkit-filter: blur(20px) !important;
 }
 
-/* ...existing code... */
 
-/* Seletores específicos para posts */
 .kvfysmfp canvas,
 canvas.ufhsfnkm,
 canvas.sc-ktPPKK,
@@ -26,7 +24,7 @@ canvas.izXBxH,
   z-index: 9999;
 }
 
-/* Garante que o container mantenha o overflow hidden */
+
 .kvfysmfp {
   position: relative !important;
   overflow: hidden !important;
