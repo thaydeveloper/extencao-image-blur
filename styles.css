@@ -1,0 +1,13 @@
+.blur-overlay {
+  filter: blur(20px) !important;
+  -webkit-filter: blur(20px) !important;
+  transform: scale(1.05);
+  pointer-events: none;
+  position: relative;
+  z-index: 9999;
+}
+
+[style*="background-image"] {
+  filter: blur(20px) !important;
+  -webkit-filter: blur(20px) !important;
+}

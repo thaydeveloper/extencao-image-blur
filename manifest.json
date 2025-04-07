@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Image Blur Extension",
+  "version": "1.0",
+  "description": "Desfoca automaticamente imagens e vídeos na página web",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["styles.css"],
+      "js": ["dist/content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "action": {
+    "default_title": "Aplicar desfoque às mídias"
+  }
+}

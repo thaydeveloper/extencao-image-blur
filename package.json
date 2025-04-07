@@ -1,0 +1,30 @@
+{
+  "name": "browser-image-blur",
+  "version": "1.0.0",
+  "description": "Uma extensão de navegador que identifica e desfoca imagens na página usando um modelo de linguagem local.",
+  "main": "src/background.ts",
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "start": "web-ext run"
+  },
+  "keywords": [
+    "browser",
+    "extension",
+    "image",
+    "blur",
+    "llm"
+  ],
+  "author": "Seu Nome",
+  "license": "MIT",
+  "dependencies": {
+    "web-ext": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.254",
+    "ts-loader": "^9.5.2",
+    "typescript": "^4.0.0",
+    "webpack": "^5.99.0",
+    "webpack-cli": "^6.0.1"
+  }
+}
